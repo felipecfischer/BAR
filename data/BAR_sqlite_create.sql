@@ -1,0 +1,103 @@
+CREATE TABLE Categoria (
+	id_categ INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	descricao VARCHAR NOT NULL,
+	situacao BOOLEAN NOT NULL
+);
+
+CREATE TABLE Fornecedor (
+	id_fornec INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	nome VARCHAR NOT NULL,
+	telefone VARCHAR NULL,
+	email VARCHAR NULL
+);
+
+CREATE TABLE Produto (
+	id_prod INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	id_categ INTEGER NOT NULL,
+	id_fornec INTEGER NULL,
+	descricao VARCHAR NOT NULL,
+	valor DOUBLE(10,2) NOT NULL,
+	situacao BOOLEAN,
+	
+	FOREIGN KEY (id_categ) REFERENCES Categoria(id_categ),
+	FOREIGN KEY (id_fornec) REFERENCES Fornecedor(id_fornec)
+);
+
+
+CREATE TABLE Cliente (
+	id_cli INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	nome VARCHAR NOT NULL,
+	telefone VARCHAR NULL,
+	email VARCHAR NULL,
+	situacao BOOLEAN NOT NULL
+);
+
+CREATE TABLE Venda (
+	id_venda INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	id_cli INTEGER NULL,
+	dt_venda DATETIME NOT NULL,
+	valor_total INTEGER NOT NULL,
+	desconto INTEGER NOT NULL,
+	situacao CHAR(1) NOT NULL,
+	
+	FOREIGN KEY (id_cli) REFERENCES Cliente(id_cli)
+);
+
+CREATE TABLE Comanda (
+	id_cmd INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	descricao VARCHAR NOT NULL,
+	situacao BOOLEAN NOT NULL
+);
+
+CREATE TABLE Conta (
+	id_cnt INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	id_cmd INTEGER NOT NULL,
+	id_cli INTEGER NULL,
+	dt_cnt DATETIME NOT NULL,
+	situacao CHAR(1) NOT NULL,
+	
+	FOREIGN KEY (id_cmd) REFERENCES Comanda(id_cmd),
+	FOREIGN KEY (id_cli) REFERENCES Cliente(id_cli)
+);
+
+
+CREATE TABLE Produto_Venda_Conta (
+	id_venda INTEGER NOT NULL,
+	id_conta INTEGER NOT NULL,
+	id_prod INTEGER NOT NULL,
+	quantidade DOUBLE(10,2) NOT NULL,
+	valor DOUBLE(10,2) NOT NULL,
+	
+	FOREIGN KEY (id_venda) REFERENCES Venda(id_venda),
+	FOREIGN KEY (id_conta) REFERENCES Conta(id_conta),
+	FOREIGN KEY (id_prod) REFERENCES Produto(id_prod)
+);
+
+CREATE TABLE Estoque (
+	id_estq INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	id_prod INTEGER NOT NULL,
+	dt_entr DATE NULL,
+	dt_sai DATE NULL,
+	quantidade INTEGER NOT NULL,
+	dt_venc DATETIME NOT NULL,
+	
+	FOREIGN KEY (id_prod) REFERENCES Produto(id_prod)	
+);
+
+CREATE TABLE Usuario (
+	id_usr INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	usuario VARCHAR NOT NULL,
+	senha VARCHAR NOT NULL,
+	situacao CHAR(1)
+);
+
+CREATE TABLE Log (
+	id_log INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	id_usr INTEGER NOT NULL,
+	tabela_registro VARCHAR NOT NULL,
+	id_registro VARCHAR NOT NULL,
+	dt_registro DATETIME NOT NULL,
+	
+	FOREIGN KEY (id_usr) REFERENCES Usuario(id_usr)	
+);
+
